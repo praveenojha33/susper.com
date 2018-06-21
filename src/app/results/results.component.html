@@ -8,6 +8,7 @@
         <li [class.active_view]="Display('images')" (click)="imageClick()">Images</li>
         <li [class.active_view]="Display('videos')" (click)="videoClick()">Videos</li>
         <li [class.active_view]="Display('news')" (click)="newsClick()">News</li>
+        <li [class.active_view]="Display('grid')" (click)="gridClick()">YaCy_Grid</li>
         <li class="dropdown">
           <a href="#" id="settings" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             Settings
@@ -33,7 +34,7 @@
     <div [hidden]="hidefooter">
       <!-- Basic results 'All' -->
       <div class="container-fluid">
-        <div class="result message-bar" *ngIf="totalNumber > 0 && !Display('images')">
+        <div class="result message-bar" *ngIf="totalNumber > 0 && !Display('images') && !Display('grid')">
           {{message}}
         </div>
         <div class="autocorrect">
@@ -174,6 +175,31 @@
           <p>{{item.link}}</p>
         </div>
       </div>
+    </div>
+  </div>
+  <!-- END -->
+  <!--YaCy Grid-->
+  <div class="container-fluid">
+      <div class="result message-bar" *ngIf="totalgridresults > 0 && Display('grid')">
+        {{gridmessage}}
+      </div>
+      <div class="autocorrect">
+        <app-auto-correct [hidden]="hideAutoCorrect"></app-auto-correct>
+      </div>
+    </div>
+  <div class="grid-result" *ngIf="Display('grid')">
+    <div class="feed container">
+        <div *ngFor="let item of gridItems" class="result">
+          <div class="title">
+            <a class="title-pointer" href="{{item.link}}" [style.color]="themeService.titleColor">{{item.title}}</a>
+          </div>
+          <div class="link">
+            <p [style.color]="themeService.linkColor">{{item.link}}</p>
+          </div>
+          <div class="description">
+            <p [style.color]="themeService.descriptionColor">{{item.pubDate|date:'MMMM d, yyyy'}} - {{item.description}}</p>
+          </div>
+        </div>
     </div>
   </div>
   <!-- END -->

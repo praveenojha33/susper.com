@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import * as fromRoot from '../reducers';
 import { Store } from '@ngrx/store';
 import * as queryactions from '../actions/query';
+import { GridSearchService } from '../services/grid-search.service';
+
 declare var $: any;
 
 @Component({
@@ -28,6 +30,9 @@ export class ResultsComponent implements OnInit {
   query: any;
   count: number = 1;
   boxMessage = 'Show';
+  gridResult:Array<any>;
+  totalgridresults:number;
+  gridmessage:string;
 
   searchdata: any = {
     query: '',
@@ -50,6 +55,7 @@ export class ResultsComponent implements OnInit {
   expand: boolean = false;
   items: Array<any>;
   expandedrow: number;
+  gridItems:Array<any>;
 
   getNumber(N) {
     let result = Array.apply(null, { length: N }).map(Number.call, Number);
@@ -96,6 +102,15 @@ export class ResultsComponent implements OnInit {
       previouselementleft = $('.image' + i).offset().left;
       i = i + 1;
     }
+  }
+  gridClick(){
+    this.getPresentPage(1);
+    this.resultDisplay = 'grid';
+    this.totalgridresults=this.gridResult[0].totalResults;
+    this.gridmessage='About ' + this.totalgridresults + ' results';
+    this.gridItems=this.gridResult[0].items;
+    
+    console.log(this.gridItems);
   }
 
   videoClick() {
@@ -167,7 +182,8 @@ export class ResultsComponent implements OnInit {
     private activatedroute: ActivatedRoute,
     private store: Store<fromRoot.State>,
     private ref: ChangeDetectorRef,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    public grid:GridSearchService
   ) {
     this.activatedroute.queryParams.subscribe(query => {
       let urldata = Object.assign({}, this.searchdata);
@@ -302,6 +318,9 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.grid.getSearchResults(this.searchdata.query).subscribe(res=>{
+      this.gridResult=res.channels;
+    });
   }
 
 }
