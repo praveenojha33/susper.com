@@ -45,9 +45,14 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { InfoboxComponent } from './infobox/infobox.component';
 import { KnowledgeapiService } from './services/knowledgeapi.service';
 import { KnowledgeEffects } from "./effects/knowledge";
+import { AllComponent } from './all/all.component';
+import { ImagesComponent } from './images/images.component';
+import { VideosComponent } from './videos/videos.component';
+import { NewsComponent } from './news/news.component';
 
 const appRoutes: Routes = [
   {path: 'search', component: ResultsComponent},
+  {path: 'all', component: AllComponent},
   {path: '', component: IndexComponent},
   {path: 'about', component: AboutComponent},
   {path: 'privacy', component: PrivacyComponent},
@@ -85,6 +90,10 @@ const appRoutes: Routes = [
     AutoCorrectComponent,
     StatsboxComponent,
     InfoboxComponent,
+    AllComponent,
+    ImagesComponent,
+    VideosComponent,
+    NewsComponent,
   ],
 
   imports: [

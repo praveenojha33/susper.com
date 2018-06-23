@@ -4,7 +4,7 @@
   <div class="row" [style.background-color]="themeService.backgroundColor">
     <div class="container-fluid" id="search-options-field" [style.background-color]="themeService.navbarbgColor">
       <ul type="none" id="search-options">
-        <li [class.active_view]="Display('all')" (click)="docClick()">All</li>
+        <a routerLink="/all" routerLinkActive="active"><li [class.active_view]="Display('all')" (click)="docClick()">All</li></a>
         <li [class.active_view]="Display('images')" (click)="imageClick()">Images</li>
         <li [class.active_view]="Display('videos')" (click)="videoClick()">Videos</li>
         <li [class.active_view]="Display('news')" (click)="newsClick()">News</li>
@@ -31,30 +31,28 @@
     </div>
 
     <div [hidden]="hidefooter">
-      <!-- Basic results 'All' -->
-      <div class="container-fluid">
-        <div class="result message-bar" *ngIf="totalNumber > 0 && !Display('images')">
-          {{message}}
-        </div>
-        <div class="autocorrect">
-          <app-auto-correct [hidden]="hideAutoCorrect"></app-auto-correct>
-        </div>
-      </div>
-
-      <div class="text-result" *ngIf="Display('all')">
-        <div *ngIf="totalNumber < 1" class="container-fluid">
-          <div [style.color]="themeService.descriptionColor" class="noResults">
-            <p>Your search -
-              <em>{{searchdata.query}}</em> - did not match any documents.</p>
-            <p>Suggestions:</p>
-            <ul>
-              <li>Make sure that all words are spelled correctly.</li>
-              <li>Try different keywords.</li>
-              <li>Try more general keywords.</li>
-            </ul>
-          </div>
-        </div>
         <div class="container-fluid">
+            <div class="result message-bar" *ngIf="totalNumber > 0 && !Display('images')">
+              {{message}}
+            </div>
+            <div class="autocorrect">
+              <app-auto-correct [hidden]="hideAutoCorrect"></app-auto-correct>
+            </div>
+          </div>
+      <div class="text-result" *ngIf="Display('all')">
+          <div *ngIf="totalNumber < 1" class="container-fluid">
+              <div [style.color]="themeService.descriptionColor" class="noResults">
+                <p>Your search -
+                  <em>{{searchdata.query}}</em> - did not match any documents.</p>
+                <p>Suggestions:</p>
+                <ul>
+                  <li>Make sure that all words are spelled correctly.</li>
+                  <li>Try different keywords.</li>
+                  <li>Try more general keywords.</li>
+                </ul>
+              </div>
+            </div>
+      <div class="container-fluid">
           <div class="combo-box">
               <app-infobox></app-infobox>
             <button class="btn" id="toggle-button" (click)="BoxToggle()" type="button" data-toggle="collapse" data-target="#statbox"
@@ -62,97 +60,59 @@
               {{boxMessage}} Analytics
             </button>
             <app-statsbox class="collapse" id="statbox"></app-statsbox>
-          </div>
-          <div class="feed">
-            <app-intelligence [hidden]="hideAutoCorrect || hideIntelligence"></app-intelligence>
-            <div class="result">
-              <div *ngFor="let item of items$|async" class="result">
-                <div class="title">
-                  <a class="title-pointer" href="{{item.link}}" [style.color]="themeService.titleColor">{{item.title}}</a>
-                </div>
-                <div class="link">
-                  <p [style.color]="themeService.linkColor">{{item.link}}</p>
-                </div>
-                <div class="description">
-                  <p [style.color]="themeService.descriptionColor">{{item.pubDate|date:'MMMM d, yyyy'}} - {{item.description}}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="infobox">
-            <app-infobox [hidden]="hidefooter || hideAutoCorrect || totalNumber < 1" *ngIf="Display('all')"></app-infobox>
-            <app-statsbox [hidden]="hidefooter || hideAutoCorrect || totalNumber < 1" *ngIf="Display('all')"></app-statsbox>
-          </div>
-        </div>
-
       </div>
-      <!--End -->
-
-      <!-- Image section -->
+      <div class="feed">
+      <app-intelligence [hidden]="hideAutoCorrect || hideIntelligence"></app-intelligence>
+      <app-all [items$]="items$"></app-all>
+      </div>
+      <div class="infobox">
+          <app-infobox [hidden]="hidefooter || hideAutoCorrect || totalNumber < 1" *ngIf="Display('all')"></app-infobox>
+          <app-statsbox [hidden]="hidefooter || hideAutoCorrect || totalNumber < 1" *ngIf="Display('all')"></app-statsbox>
+        </div>
+      </div>
+      </div>
       <div *ngIf="Display('images')">
-        <div *ngIf="totalNumber < 1" class="container-fluid">
-          <div [style.color]="themeService.descriptionColor" class="noResults">
-            <p>Your search -
-              <em>{{searchdata.query}}</em> - did not match any images.</p>
-            <p>Suggestions:</p>
-            <ul>
-              <li>Make sure that all words are spelled correctly.</li>
-              <li>Try different keywords.</li>
-              <li>Try more general keywords.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="container">
-          <div class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="300" (scrolled)="onScroll()">
-          </div>
-          <div *ngIf="totalNumber > 0">
-            <div *ngFor="let item of items;let i = index">
-              <div class="item">
-                <img src="{{item.image}}" height="200px" (click)="expandImage(i)" [ngClass]="'image'+i">
-            </div>
-            <div class=" item image-viewer" *ngIf="expand && expandedrow === i">
-              <span class="helper"></span>
-              <img [src]="items[expandedkey].image" height="200px" style="vertical-align: middle;">
-            </div>
-
-            </div>
-
-          </div>
-        </div>
+      <div *ngIf="totalNumber < 1" class="container-fluid">
+              <div [style.color]="themeService.descriptionColor" class="noResults">
+                <p>Your search -
+                  <em>{{searchdata.query}}</em> - did not match any images.</p>
+                <p>Suggestions:</p>
+                <ul>
+                  <li>Make sure that all words are spelled correctly.</li>
+                  <li>Try different keywords.</li>
+                  <li>Try more general keywords.</li>
+                </ul>
+              </div>
       </div>
-      <!-- END -->
+      <div class="container">
+      <div class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="300" (scrolled)="onScroll()">
+      </div>
+      <div *ngIf="totalNumber > 0">
+      <app-images [items$]="items$"></app-images>
+      </div>
+      </div>
+      </div>
       <!--Video Section -->
       <div class="video-result" *ngIf="Display('videos')">
-        <div *ngIf="totalNumber < 1" class="container-fluid">
-          <div [style.color]="themeService.descriptionColor" class="noResults">
-            <p>Your search -
-              <em>{{searchdata.query}}</em> - did not match any videos.</p>
-            <p>Suggestions:</p>
-            <ul>
-              <li>Make sure that all words are spelled correctly.</li>
-              <li>Try different keywords.</li>
-              <li>Try more general keywords.</li>
-            </ul>
-          </div>
-        </div>
-        <div class="feed container">
-          <div *ngFor="let item of items$|async" class="result">
-            <div class="title">
-              <a class="title-pointer" href="{{item.link}}" [style.color]="themeService.titleColor">{{item.title}}</a>
-            </div>
-            <div class="link">
-              <p [style.color]="themeService.linkColor">{{item.link}}</p>
-            </div>
-            <div class="description">
-                  <p [style.color]="themeService.descriptionColor">{{item.pubDate|date:'MMMM d, yyyy'}} - {{item.description}}</p>
+          <div *ngIf="totalNumber < 1" class="container-fluid">
+            <div [style.color]="themeService.descriptionColor" class="noResults">
+              <p>Your search -
+                <em>{{searchdata.query}}</em> - did not match any videos.</p>
+              <p>Suggestions:</p>
+              <ul>
+                <li>Make sure that all words are spelled correctly.</li>
+                <li>Try different keywords.</li>
+                <li>Try more general keywords.</li>
+              </ul>
             </div>
           </div>
+          <div class="feed container">
+            <app-images [items$]="items$"></app-images>
+          </div>
         </div>
-      </div>
-      <!--End-->
-       <!-- News section -->
-  <div class="news-result" *ngIf="Display('news')">
+        <!--End-->
+      <!-- News section -->
+<div class="news-result" *ngIf="Display('news')">
     <div *ngIf="totalNumber < 1" class="container-fluid">
       <div class="noResults">
         <p>Your search -
@@ -166,14 +126,7 @@
       </div>
     </div>
     <div class="feed container">
-      <div *ngFor="let item of items$|async" class="result">
-        <div class="title">
-          <a class="title-pointer" href="{{item.link}}">{{item.title}}</a>
-        </div>
-        <div class="link">
-          <p>{{item.link}}</p>
-        </div>
-      </div>
+      <app-news [items$]="items$"></app-news>
     </div>
   </div>
   <!-- END -->
